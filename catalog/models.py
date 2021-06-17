@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.contrib.auth.models import User
 
 
@@ -9,8 +10,8 @@ CATEGORY_CHOICES = (
 )
 LABEL_CHOICES = (
     ('S', 'secondary'),
-    ('P', 'Primary'),
-    ('D', 'Danger')
+    ('P', 'primary'),
+    ('D', 'danger')
 )
 
 # Create your models here.
@@ -19,12 +20,20 @@ class Item(models.Model):
     price = models.IntegerField()
     discount_price = models.IntegerField(blank=True, null=True)
     slug = models.SlugField()
+    status = models.CharField(max_length=200)
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
     label = models.CharField(choices=LABEL_CHOICES, max_length=2)
     description = models.TextField()
+    image = models.ImageField(default='default.jpg', upload_to='static/images')
 
     def __str__(self):
         return self.title
+
+    def get_add_to_cart_url(self):
+        return reverse('add_to_cart', kwargs={'slug':self.slug})
+
+    def get_remove_from_cart_url(self):
+        return reverse('remove_from_cart', kwargs={'slug':self.slug})
 
 
 class OrderItem(models.Model):
