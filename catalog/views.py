@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.utils import timezone
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView,view
 from .models import Item, OrderItem, Order
 
 # Create your views here.
@@ -14,6 +14,10 @@ class HomeView(ListView):
 class ProductDetail(DetailView):
     model = Item
     template_name = 'product.html'
+
+class OrderSummaryView(view):
+    def get(self, *args, **kwargs):
+        return render(sekf.request, 'order_summary.html')
 
 
 
